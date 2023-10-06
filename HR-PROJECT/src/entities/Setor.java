@@ -1,7 +1,16 @@
 package entities;
 
-interface Setor {
-
-    String getSetor();
-    String getFuncao();
+public enum Setor {
+    INDUSTRIAL,
+    RH,
+    COMPRAS,
+    VENDAS,
+    ESTOQUE,
+    ALMOXARIFADO,
+    LIMPEZA,
+    QUALIDADE,
+    ADMINISTRACAO,
+    GERENCIA,
+    MARKETING,
+    DESIGN
 }

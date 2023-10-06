@@ -27,6 +27,7 @@ public class Empresa {
     public void informacoesFuncionarios() {
         for (Pessoa pessoa : pessoas) {
             System.out.println(pessoa.toString());
+            System.out.println();
         }
     }
 

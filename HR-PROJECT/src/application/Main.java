@@ -1,9 +1,6 @@
 package application;
 
-import entities.Empresa;
-import entities.Funcionario;
-import entities.Pessoa;
-import entities.Turno;
+import entities.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,13 +17,22 @@ public class Main {
             Empresa jequitiba = new Empresa(nomeEmpresa, dataFundacao, saldo);
 
 
-            Turno turno = Turno.NOITE;
+            Turno turnoRoberto = Turno.NOITE;
+            Setor setorRoberto = Setor.INDUSTRIAL;
             Date dtNascimentoRoberto = dateFormat.parse("01/01/1987");
 
-            Pessoa roberto = new Funcionario("Roberto Silva", "12312312312", dtNascimentoRoberto, "Industrial",
-                    12900.50, "12343212", "Mecânico", turno);
+            Setor setorJose = Setor.RH;
+            Date dtNascimentoJose = dateFormat.parse("05/08/1999");
+            Turno turnoJose = Turno.MANHA;
+
+            Pessoa roberto = new Funcionario("Roberto Silva", "12312312312", dtNascimentoRoberto, setorRoberto,
+                    12900.50, "12343212", "Mecânico", turnoRoberto);
+
+            Pessoa jose = new RH("Roberto Silva", "12312312312", dtNascimentoJose, setorJose,
+                    12900.50, "12343212", "Administrador", turnoJose);
 
             jequitiba.adicionarPessoas(roberto);
+            jequitiba.adicionarPessoas(jose);
 
             jequitiba.informacoesFuncionarios();
 

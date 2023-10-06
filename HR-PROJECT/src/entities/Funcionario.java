@@ -2,9 +2,9 @@ package entities;
 
 import java.util.Date;
 
-public class Funcionario extends Pessoa implements Setor{
+public class Funcionario extends Pessoa implements PropriedadesSetor {
 
-    private String setor;
+    private Setor setor;
     private double salario;
     private String carteiraTrabalho;
     private String funcao;
@@ -12,7 +12,7 @@ public class Funcionario extends Pessoa implements Setor{
 
     public Funcionario(String nome, String cpf,
                        Date dtNascimento,
-                       String setor,
+                       Setor setor,
                        double salario,
                        String carteiraTrabalho,
                        String funcao, Turno turno) {
