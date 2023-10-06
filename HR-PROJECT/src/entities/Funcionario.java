@@ -48,10 +48,11 @@ public class Funcionario extends Pessoa implements PropriedadesSetor {
 
     @Override
     public String toString() {
-        return "A aplicação de " + getNome()
-                + "\nDono do CPF: " + getCpf()
-                + "\nÉ no " + getSetor()
-                + "\nNo turno: " + getTurno().toLowerCase()
-                + "\nRealizando a " + getFuncao();
+        return "Nome: " + getNome()
+                + "\nCPF: " + getCpf()
+                + "\nSetor: " + getSetor()
+                + "\nTurno: " + getTurno().toLowerCase()
+                + "\nFunção: " + getFuncao()
+                + "\nSalário: " + getSalario();
     }
 }

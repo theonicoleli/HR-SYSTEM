@@ -26,7 +26,7 @@ public class Main {
             Turno turnoJose = Turno.MANHA;
 
             Pessoa roberto = new Funcionario("Roberto Silva", "12312312312", dtNascimentoRoberto, setorRoberto,
-                    12900.50, "12343212", "Mecânico", turnoRoberto);
+                    8567.50, "12343212", "Mecânico", turnoRoberto);
 
             Pessoa jose = new RH("Roberto Silva", "12312312312", dtNascimentoJose, setorJose,
                     12900.50, "12343212", "Administrador", turnoJose);
@@ -34,6 +34,8 @@ public class Main {
             jequitiba.adicionarPessoas(roberto);
             jequitiba.adicionarPessoas(jose);
 
+
+            ((RH) jose).informacoesFuncionarios(jequitiba);
             jequitiba.informacoesFuncionarios();
 
         }

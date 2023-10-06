@@ -6,10 +6,10 @@ import java.util.Date;
 
 public class Empresa {
 
-    private String nome;
-    private ArrayList<Pessoa> pessoas;
-    private Date companyAge;
-    private double balance;
+    private final String nome;
+    private final ArrayList<Pessoa> pessoas;
+    private final Date companyAge;
+    private final double balance;
     protected SimpleDateFormat sdf;
 
     public Empresa(String nome, Date companyAge, double balance) {
@@ -29,6 +29,13 @@ public class Empresa {
             System.out.println(pessoa.toString());
             System.out.println();
         }
+    }
+
+    public ArrayList<Pessoa> getPessoasParaRH(Pessoa pessoa) {
+        if (pessoa instanceof RH) {
+            return pessoas;
+        }
+        return null;
     }
 
     public String getNome() {
