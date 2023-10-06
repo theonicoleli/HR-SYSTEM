@@ -28,6 +28,8 @@ public class Funcionario extends Pessoa implements PropriedadesSetor {
         if (administrador instanceof RH) {
             funcionario.setSalario(administrador, funcionario, newSalario);
             System.out.println("Salário de " + funcionario.getNome() + " atualizado para: " + newSalario);
+        } else {
+            throw new FuncionarioException("Você não tem permissão de alterar salário de outros funcionários.");
         }
     }
 
@@ -43,6 +45,8 @@ public class Funcionario extends Pessoa implements PropriedadesSetor {
     private void setSalario(Funcionario administrador, Funcionario funcionario, double newSalario) {
         if (administrador instanceof RH) {
             funcionario.salario = newSalario;
+        } else {
+            throw new FuncionarioException("Você não tem permissão de alterar salário de outros funcionários.");
         }
     }
 

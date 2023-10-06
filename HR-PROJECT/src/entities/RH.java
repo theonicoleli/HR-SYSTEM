@@ -6,6 +6,7 @@ import java.util.Iterator;
 
 public class RH extends Funcionario implements PropriedadesSetor {
 
+    private boolean retirarFuncionario;
     private ArrayList<Pessoa> funcionarios = new ArrayList<>();
 
     public RH(String nome, String cpf,
@@ -41,6 +42,15 @@ public class RH extends Funcionario implements PropriedadesSetor {
         }
     }
 
+    private boolean verificandoFuncionarioExistente(String cpf) {
+        for (Pessoa funcionario : funcionarios) {
+            if (funcionario.getCpf().equals(cpf)) {
+                throw new FuncionarioException("Funcionario já existente.");
+            }
+        }
+        return true;
+    }
+
     public void adicionarFuncionario(Empresa empresa, String nome, String cpf,
                          Date dtNascimento, Setor setor,
                          double salario, String carteiraTrabalho,
@@ -48,11 +58,12 @@ public class RH extends Funcionario implements PropriedadesSetor {
 
         confirmandoPessoas(empresa);
 
-        funcionarios.add(new Funcionario(nome, cpf, dtNascimento,
-                setor, salario, carteiraTrabalho,
-                funcao, turno));
-
-        atualizandoLista(empresa);
+        if (verificandoFuncionarioExistente(cpf)) {
+            funcionarios.add(new Funcionario(nome, cpf, dtNascimento,
+                    setor, salario, carteiraTrabalho,
+                    funcao, turno));
+            atualizandoLista(empresa);
+        }
     }
 
     public void removerFuncionario(Empresa empresa, String nome) {
@@ -63,11 +74,16 @@ public class RH extends Funcionario implements PropriedadesSetor {
             Pessoa funcionario = iterator.next();
             if (funcionario.getNome().equals(nome)) {
                 System.out.println("Removendo o funcionario...\n" + funcionario.toString());
+                retirarFuncionario = true;
                 iterator.remove();
                 System.out.println();
             }
         }
+        if (retirarFuncionario != true) {
+            throw new FuncionarioException("Não existe nenhum funcionário com este nome.");
+        }
 
+        retirarFuncionario = false;
         atualizandoLista(empresa);
     }
 

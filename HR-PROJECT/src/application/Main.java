@@ -16,7 +16,6 @@ public class Main {
 
             Empresa jequitiba = new Empresa(nomeEmpresa, dataFundacao, saldo);
 
-
             Turno turnoRoberto = Turno.NOITE;
             Setor setorRoberto = Setor.INDUSTRIAL;
             Date dtNascimentoRoberto = dateFormat.parse("01/01/1987");
@@ -38,7 +37,7 @@ public class Main {
             jequitiba.adicionarPessoas(roberto);
             jequitiba.adicionarPessoas(jose);
 
-            ((RH) jose).adicionarFuncionario(jequitiba, "Ricardo Silva", "12312312312", dtNascimentoRicardo,
+            ((RH) jose).adicionarFuncionario(jequitiba, "Ricardo Silva", "12312312317", dtNascimentoRicardo,
                     setorRicardo, 6754.76, "12343212", "Estoquista", turnoRicardo);
 
             ((RH) jose).informacoesFuncionarios(jequitiba);
@@ -46,6 +45,9 @@ public class Main {
             ((RH) jose).removerFuncionario(jequitiba, "Ricardo Silva");
 
             ((RH) jose).alterarFuncionario(jequitiba, "Roberto Silva", 10000);
+
+            //((RH) jose).removerFuncionario(jequitiba, "Kleber"); // Vai entrar na exceção quando for ativado
+            // pois não existe ninguém com este nome.
 
             System.out.println();
             System.out.println("ATUALIZADO: ");
@@ -55,6 +57,9 @@ public class Main {
 
         }
         catch (ParseException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        catch (FuncionarioException e) {
             System.out.println("Error: " + e.getMessage());
         }
     }

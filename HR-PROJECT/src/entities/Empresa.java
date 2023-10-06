@@ -21,6 +21,11 @@ public class Empresa {
     }
 
     public void adicionarPessoas(Pessoa pessoa) {
+        for (Pessoa pessoa1: pessoas) {
+            if (pessoa1.equals(pessoa)) {
+                throw new FuncionarioException("Pessoa já existente na lista de funcionários.");
+            }
+        }
         pessoas.add(pessoa);
     }
 
