@@ -7,7 +7,7 @@ import java.util.Date;
 public class Empresa {
 
     private final String nome;
-    private final ArrayList<Pessoa> pessoas;
+    private ArrayList<Pessoa> pessoas;
     private final Date companyAge;
     private final double balance;
     protected SimpleDateFormat sdf;
@@ -36,6 +36,10 @@ public class Empresa {
             return pessoas;
         }
         return null;
+    }
+
+    public void atualizandoLista(ArrayList<Pessoa> funcionarios) {
+        pessoas = funcionarios;
     }
 
     public String getNome() {

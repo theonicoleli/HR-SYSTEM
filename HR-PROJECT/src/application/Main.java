@@ -25,17 +25,32 @@ public class Main {
             Date dtNascimentoJose = dateFormat.parse("05/08/1999");
             Turno turnoJose = Turno.MANHA;
 
-            Pessoa roberto = new Funcionario("Roberto Silva", "12312312312", dtNascimentoRoberto, setorRoberto,
-                    8567.50, "12343212", "Mecânico", turnoRoberto);
+            Setor setorRicardo = Setor.ESTOQUE;
+            Date dtNascimentoRicardo = dateFormat.parse("17/04/2000");
+            Turno turnoRicardo = Turno.TARDE;
 
-            Pessoa jose = new RH("Roberto Silva", "12312312312", dtNascimentoJose, setorJose,
+            Pessoa roberto = new Funcionario("Roberto Silva", "12312312312", dtNascimentoRoberto,
+                    setorRoberto, 8567.50, "12343212", "Mecânico", turnoRoberto);
+
+            Pessoa jose = new RH("José Silva", "12312312312", dtNascimentoJose, setorJose,
                     12900.50, "12343212", "Administrador", turnoJose);
 
             jequitiba.adicionarPessoas(roberto);
             jequitiba.adicionarPessoas(jose);
 
+            ((RH) jose).adicionarFuncionario(jequitiba, "Ricardo Silva", "12312312312", dtNascimentoRicardo,
+                    setorRicardo, 6754.76, "12343212", "Estoquista", turnoRicardo);
 
             ((RH) jose).informacoesFuncionarios(jequitiba);
+
+            ((RH) jose).removerFuncionario(jequitiba, "Ricardo Silva");
+
+            ((RH) jose).alterarFuncionario(jequitiba, "Roberto Silva", 10000);
+
+            System.out.println();
+            System.out.println("ATUALIZADO: ");
+            System.out.println();
+
             jequitiba.informacoesFuncionarios();
 
         }

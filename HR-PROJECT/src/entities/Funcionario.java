@@ -24,12 +24,26 @@ public class Funcionario extends Pessoa implements PropriedadesSetor {
         this.turno = turno;
     }
 
+    protected void mudarSalario(Funcionario administrador, Funcionario funcionario, double newSalario) {
+        if (administrador instanceof RH) {
+            funcionario.setSalario(administrador, funcionario, newSalario);
+            System.out.println("Salário de " + funcionario.getNome() + " atualizado para: " + newSalario);
+        }
+    }
+
+
     public String getTurno() {
         return "" + turno;
     }
 
     public double getSalario() {
         return salario;
+    }
+
+    private void setSalario(Funcionario administrador, Funcionario funcionario, double newSalario) {
+        if (administrador instanceof RH) {
+            funcionario.salario = newSalario;
+        }
     }
 
     public String getCarteiraTrabalho() {
