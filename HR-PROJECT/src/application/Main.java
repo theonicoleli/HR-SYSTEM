@@ -46,7 +46,7 @@ public class Main {
 
             ((RH) jose).alterarFuncionario(jequitiba, "Roberto Silva", 10000);
 
-            //((RH) jose).removerFuncionario(jequitiba, "Kleber"); // Vai entrar na exceção quando for ativado
+            ((RH) jose).removerFuncionario(jequitiba, "Kleber"); // Vai entrar na exceção quando for ativado
             // pois não existe ninguém com este nome.
 
             System.out.println();

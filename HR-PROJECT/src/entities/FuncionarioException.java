@@ -2,7 +2,9 @@ package entities;
 
 public class FuncionarioException extends RuntimeException{
 
+    private static final long serialVersionUID = 1L;
+
     public FuncionarioException(String message) {
-        System.out.println(message);
+        super(message);
     }
 }
