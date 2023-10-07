@@ -1,5 +1,8 @@
 package entities;
 
+import entities.enumerator.Setor;
+import entities.enumerator.Turno;
+
 import java.util.Date;
 
 public class Funcionario extends Pessoa implements PropriedadesSetor {

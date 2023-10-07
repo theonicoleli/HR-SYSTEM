@@ -1,6 +1,8 @@
 package application;
 
 import entities.*;
+import entities.enumerator.Setor;
+import entities.enumerator.Turno;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

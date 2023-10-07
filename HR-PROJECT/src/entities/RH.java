@@ -1,5 +1,8 @@
 package entities;
 
+import entities.enumerator.Setor;
+import entities.enumerator.Turno;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
