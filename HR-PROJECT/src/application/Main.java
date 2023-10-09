@@ -46,9 +46,9 @@ public class Main {
 
             ((RH) jose).removerFuncionario(jequitiba, "Ricardo Silva");
 
-            ((RH) jose).alterarFuncionario(jequitiba, "Roberto Silva", 10000);
+            ((RH) jose).alterarFuncionario("Roberto Silva", 10000, Setor.COMPRAS, Turno.MANHA);
 
-            ((RH) jose).removerFuncionario(jequitiba, "Kleber"); // Vai entrar na exceção quando for ativado
+            //((RH) jose).removerFuncionario(jequitiba, "Kleber"); // Vai entrar na exceção quando for ativado
             // pois não existe ninguém com este nome.
 
             System.out.println();
@@ -56,6 +56,8 @@ public class Main {
             System.out.println();
 
             jequitiba.informacoesFuncionarios();
+
+            System.out.println(jequitiba.toString());
 
         }
         catch (ParseException e) {

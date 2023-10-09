@@ -36,11 +36,11 @@ public class Empresa {
         }
     }
 
-    public ArrayList<Pessoa> getPessoasParaRH(Pessoa pessoa) {
+    public ArrayList<Pessoa> getPessoas(Pessoa pessoa) {
         if (pessoa instanceof RH) {
             return pessoas;
         }
-        return null;
+        throw new FuncionarioException("Apenas o RH, tem direito de pegar dados de todos os funcionários.");
     }
 
     public void atualizandoLista(ArrayList<Pessoa> funcionarios) {
@@ -51,11 +51,23 @@ public class Empresa {
         return nome;
     }
 
-    public String getCompanyAge() {
-        return sdf.format(companyAge);
+    public int getCompanyAge() {
+        Date currentDate = new Date();
+        int currentYear = Integer.parseInt(sdf.format(currentDate).split("/")[2]);
+        int companyStartYear = Integer.parseInt(sdf.format(companyAge).split("/")[2]);
+
+        int age = currentYear - companyStartYear;
+        return age;
     }
 
     public double getBalance() {
         return balance;
+    }
+
+    @Override
+    public String toString() {
+        return "Empresa: " + getNome()
+                + "\nIdade: " + getCompanyAge()
+                + "\nLucro aproximado: R$" + getBalance();
     }
 }

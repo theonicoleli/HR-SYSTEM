@@ -22,7 +22,7 @@ public class RH extends Funcionario implements PropriedadesSetor {
     }
 
     private void copiandoListaPessoas(Empresa empresa) {
-        funcionarios = empresa.getPessoasParaRH(this);
+        funcionarios = empresa.getPessoas(this);
     }
 
     private void atualizandoLista(Empresa empresa) {
@@ -90,7 +90,7 @@ public class RH extends Funcionario implements PropriedadesSetor {
         atualizandoLista(empresa);
     }
 
-    public void alterarFuncionario(Empresa empresa, String nome, double newSalario) {
+    public void alterarFuncionario(String nome, double newSalario) {
         for (Pessoa funcionario : funcionarios) {
             if (funcionario.getNome().equals(nome)) {
                 mudarSalario(this, (Funcionario) funcionario, newSalario);
@@ -98,5 +98,30 @@ public class RH extends Funcionario implements PropriedadesSetor {
         }
     }
 
+    public void alterarFuncionario(String nome, Setor setor) {
+        for (Pessoa funcionario: funcionarios) {
+            if (funcionario.getNome().equals(nome)) {
+                mudarSetor(this, (Funcionario) funcionario, setor);
+            }
+        }
+    }
+
+    public void alterarFuncionario(String nome, Turno turno) {
+        for (Pessoa funcionario : funcionarios) {
+            if (funcionario.getNome().equals(nome)) {
+                mudarTurno(this, (Funcionario) funcionario, turno);
+            }
+        }
+    }
+
+    public void alterarFuncionario(String nome, double newSalario, Setor setor, Turno turno) {
+        for (Pessoa funcionario : funcionarios) {
+            if (funcionario.getNome().equals(nome)) {
+                mudarSalario(this, (Funcionario) funcionario, newSalario);
+                mudarSetor(this, (Funcionario) funcionario, setor);
+                mudarTurno(this, (Funcionario) funcionario, turno);
+            }
+        }
+    }
 
 }
