@@ -1,6 +1,7 @@
 package application;
 
 import entities.*;
+import entities.DataBase.DAO;
 import entities.enumerator.Setor;
 import entities.enumerator.Turno;
 
@@ -11,6 +12,9 @@ import java.util.Date;
 public class Main {
     public static void main(String[] args) {
         try {
+
+            DAO dataBase = new DAO(); //DataBase
+
             String nomeEmpresa = "Jequitiba";
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             Date dataFundacao = dateFormat.parse("01/01/2000");
@@ -38,6 +42,11 @@ public class Main {
 
             jequitiba.adicionarPessoas(roberto);
             jequitiba.adicionarPessoas(jose);
+
+            dataBase.addPessoa(roberto);
+            dataBase.addPessoa(jose);
+
+            dataBase.listagemPessoas();
 
             ((RH) jose).adicionarFuncionario(jequitiba, "Ricardo Silva", "12312312317", dtNascimentoRicardo,
                     setorRicardo, 6754.76, "12343212", "Estoquista", turnoRicardo);
