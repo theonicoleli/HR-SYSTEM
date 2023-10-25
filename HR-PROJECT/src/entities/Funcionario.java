@@ -1,12 +1,17 @@
 package entities;
 
+import entities.DataBase.DAO;
 import entities.enumerator.Setor;
 import entities.enumerator.Turno;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Date;
 
 public class Funcionario extends Pessoa implements PropriedadesSetor {
 
+    private DAO dao;
     private Setor setor;
     private double salario;
     private String carteiraTrabalho;
@@ -27,30 +32,66 @@ public class Funcionario extends Pessoa implements PropriedadesSetor {
         this.turno = turno;
     }
 
-    protected void mudarSalario(Funcionario administrador, Funcionario funcionario, double newSalario) {
+    protected void mudarSalario(Funcionario administrador, Funcionario funcionario, double newSalario) throws SQLException {
         if (administrador instanceof RH) {
             funcionario.setSalario(administrador, funcionario, newSalario);
-            System.out.println("Salário de " + funcionario.getNome() + " atualizado para: " + newSalario);
+            Connection con = dao.conectar();
+            if (dao.possivelAlteracao(administrador, funcionario)) {
+                String changingData = "UPDATE FUNCIONARIO SET SALARIO = ? WHERE CPF = ?";
+                PreparedStatement preparedStatement = con.prepareStatement(changingData);
+                preparedStatement.setDouble(1, newSalario);
+                preparedStatement.setString(2, funcionario.getCpf());
+                int rowsAffected = preparedStatement.executeUpdate();
+                System.out.println("Salário de " + funcionario.getNome() + " atualizado para: " + newSalario);
+                if (rowsAffected == 0) {
+                    System.out.println("Nenhum registro foi atualizado. Verifique o CPF.");
+                }
+                preparedStatement.close();
+            }
         } else {
-            throw new FuncionarioException("Você não tem permissão de alterar salário de outros funcionários.");
+            throw new FuncionarioException("Você não tem permissão para alterar o salário de outros funcionários.");
         }
     }
 
-    protected void mudarSetor(Funcionario administrador, Funcionario funcionario, Setor setor) {
+    protected void mudarSetor(Funcionario administrador, Funcionario funcionario, Setor setor) throws SQLException {
         if (administrador instanceof RH) {
             funcionario.setSetor(administrador, funcionario, setor);
-            System.out.println("Setor de " + funcionario.getNome() + " atualizado para: " + setor);
+            Connection con = dao.conectar();
+            if (dao.possivelAlteracao(administrador, funcionario)) {
+                String changingData = "UPDATE FUNCIONARIO SET NomeSetor = ? WHERE CPF = ?";
+                PreparedStatement preparedStatement = con.prepareStatement(changingData);
+                preparedStatement.setString(1, String.valueOf(setor));
+                preparedStatement.setString(2, funcionario.getCpf());
+                int rowsAffected = preparedStatement.executeUpdate();
+                System.out.println("Setor de " + funcionario.getNome() + " atualizado para: " + setor);
+                if (rowsAffected == 0) {
+                    System.out.println("Nenhum registro foi atualizado. Verifique o CPF.");
+                }
+                preparedStatement.close();
+            }
         } else {
-            throw new FuncionarioException("Você não tem permissão de alterar salário de outros funcionários.");
+            throw new FuncionarioException("Você não tem permissão de alterar o setor de outros funcionários.");
         }
     }
 
-    protected void mudarTurno(Funcionario administrador, Funcionario funcionario, Turno turno) {
+    protected void mudarTurno(Funcionario administrador, Funcionario funcionario, Turno turno) throws SQLException {
         if (administrador instanceof RH) {
             funcionario.setTurno(administrador, funcionario, turno);
-            System.out.println("Turno de " + funcionario.getNome() + " atualizado para: " + turno);
+            Connection con = dao.conectar();
+            if (dao.possivelAlteracao(administrador, funcionario)) {
+                String changingData = "UPDATE FUNCIONARIO SET Turno = ? WHERE CPF = ?";
+                PreparedStatement preparedStatement = con.prepareStatement(changingData);
+                preparedStatement.setString(1, String.valueOf(turno));
+                preparedStatement.setString(2, funcionario.getCpf());
+                int rowsAffected = preparedStatement.executeUpdate();
+                System.out.println("Turno de " + funcionario.getNome() + " atualizado para: " + turno);
+                if (rowsAffected == 0) {
+                    System.out.println("Nenhum registro foi atualizado. Verifique o CPF.");
+                }
+                preparedStatement.close();
+            }
         } else {
-            throw new FuncionarioException("Você não tem permissão de alterar salário de outros funcionários.");
+            throw new FuncionarioException("Você não tem permissão de alterar o turno de outros funcionários.");
         }
     }
 

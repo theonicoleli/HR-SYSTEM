@@ -43,10 +43,13 @@ public class Main {
             jequitiba.adicionarPessoas(roberto);
             jequitiba.adicionarPessoas(jose);
 
-            dataBase.addPessoa(roberto);
-            dataBase.addPessoa(jose);
+            dataBase.addPessoa(jose, roberto);
+            dataBase.addPessoa(jose, jose);
+
+            System.out.println("Database: ");
 
             dataBase.listagemPessoas();
+            System.out.println();
 
             ((RH) jose).adicionarFuncionario(jequitiba, "Ricardo Silva", "12312312317", dtNascimentoRicardo,
                     setorRicardo, 6754.76, "12343212", "Estoquista", turnoRicardo);
@@ -75,5 +78,8 @@ public class Main {
         catch (FuncionarioException e) {
             System.out.println("Error: " + e.getMessage());
         }
+        /*catch (NullPointerException e) {
+            System.out.println("Error: " + e.getMessage());
+        }*/
     }
 }
