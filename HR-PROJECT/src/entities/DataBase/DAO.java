@@ -3,12 +3,15 @@ package entities.DataBase;
 import entities.Funcionario;
 import entities.FuncionarioException;
 import entities.Pessoa;
+import entities.RH;
 
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 public class DAO {
+
+    private RH rh;
     private Connection con;
     private String driver = "com.mysql.cj.jdbc.Driver";
     private String user = "root";
@@ -30,6 +33,14 @@ public class DAO {
         }
     }
 
+    public boolean possivelAlteracao(Pessoa rh, Pessoa funcionario) {
+        if (funcionario instanceof Funcionario && rh instanceof RH &&
+                ((RH) rh).verificandoFuncionarioExistente(funcionario.getCpf())) {
+            return true;
+        }
+        return false;
+    }
+
     public void fecharCon() throws SQLException {
         if (con != null) {
             con.close();
@@ -42,15 +53,21 @@ public class DAO {
             ResultSet rsPessoas = statement.executeQuery("SELECT * FROM Funcionario;");
             while (rsPessoas.next()) {
                 System.out.println("Nome: " + rsPessoas.getString("Nome"));
+                System.out.println("Data de nascimento: " + rsPessoas.getString("DataNasc"));
+                System.out.println("Salário: " + rsPessoas.getString("Salario"));
+                System.out.println("CPF: " + rsPessoas.getString("Cpf"));
+                System.out.println("Setor: " + rsPessoas.getString("NomeSetor"));
+                System.out.println("Turno: " + rsPessoas.getString("Turno"));
+                System.out.println("Carteira de Trabalho: " + rsPessoas.getString("CarteiraTrabalho"));
             }
             rsPessoas.close();
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
-    public void addPessoa(Pessoa funcionario) {
+    public void addPessoa(Pessoa rh, Pessoa funcionario) {
         try {
-            if (funcionario instanceof Funcionario) {
+            if (possivelAlteracao(rh, funcionario)){
                 Funcionario func = (Funcionario) funcionario;
                 PreparedStatement preparedStatement = con.prepareStatement("INSERT INTO Funcionario (Nome, DataNasc, Salario, Cpf, NomeSetor, Turno, CarteiraTrabalho) VALUES (?, ?, ?, ?, ?, ?, ?)");
                 preparedStatement.setString(1, func.getNome());
@@ -68,15 +85,32 @@ public class DAO {
                 preparedStatement.setString(7, func.getCarteiraTrabalho());
 
                 preparedStatement.executeUpdate();
+                preparedStatement.close();
             } else {
-                throw new FuncionarioException("Você não está inserindo um funcionário e sim uma pessoa.");
+                throw new FuncionarioException("Ocorreu um erro, não foi possível a inserção de um novo funcionário.");
             }
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
-        } catch (FuncionarioException e) {
-            System.out.println(e.getMessage());
         } catch (ParseException e) {
             System.out.println("Erro ao converter a data: " + e.getMessage());
+        }
+    }
+
+    public void removerFuncionario(Pessoa rh, Pessoa funcionario) {
+        try {
+            if (possivelAlteracao(rh, funcionario)) {
+                Funcionario func = (Funcionario) funcionario;
+                String deleteSQL = "DELETE FROM FUNCIONARIO WHERE CPF = ?";
+                PreparedStatement preparedStatement = con.prepareStatement(deleteSQL);
+                preparedStatement.setString(1, func.getCpf());
+                preparedStatement.executeUpdate();
+                preparedStatement.close();
+            }
+            else {
+                throw new FuncionarioException("Ocorreu um erro, não foi possível a exclusão do funcionário " + funcionario.getNome() + ".");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
         }
     }
 }

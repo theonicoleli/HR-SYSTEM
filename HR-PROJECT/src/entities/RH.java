@@ -1,14 +1,18 @@
 package entities;
 
+import entities.DataBase.DAO;
 import entities.enumerator.Setor;
 import entities.enumerator.Turno;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
 public class RH extends Funcionario implements PropriedadesSetor {
 
+    private DAO dao;
     private boolean retirarFuncionario;
     private ArrayList<Pessoa> funcionarios = new ArrayList<>();
 
@@ -19,6 +23,7 @@ public class RH extends Funcionario implements PropriedadesSetor {
         super(nome, cpf, dtNascimento,
                 setor, salario, carteiraTrabalho,
                 funcao, turno);
+        dao = new DAO();
     }
 
     private void copiandoListaPessoas(Empresa empresa) {
@@ -39,15 +44,16 @@ public class RH extends Funcionario implements PropriedadesSetor {
         copiandoListaPessoas(empresa);
         for (Pessoa funcionario : funcionarios) {
             if (funcionario instanceof Funcionario) {
-                System.out.println(funcionario.toString());
+                System.out.println(funcionario);
                 System.out.println();
             }
         }
     }
 
-    private boolean verificandoFuncionarioExistente(String cpf) {
+    public boolean verificandoFuncionarioExistente(String cpf) {
         for (Pessoa funcionario : funcionarios) {
             if (funcionario.getCpf().equals(cpf)) {
+                System.out.println(funcionario.getCpf() + " " + cpf);
                 throw new FuncionarioException("Funcionario já existente.");
             }
         }
@@ -62,10 +68,12 @@ public class RH extends Funcionario implements PropriedadesSetor {
         confirmandoPessoas(empresa);
 
         if (verificandoFuncionarioExistente(cpf)) {
-            funcionarios.add(new Funcionario(nome, cpf, dtNascimento,
+             Funcionario func = new Funcionario(nome, cpf, dtNascimento,
                     setor, salario, carteiraTrabalho,
-                    funcao, turno));
-            atualizandoLista(empresa);
+                    funcao, turno);
+             funcionarios.add(func);
+             atualizandoLista(empresa);
+             dao.addPessoa(this, func);
         }
     }
 
@@ -76,8 +84,9 @@ public class RH extends Funcionario implements PropriedadesSetor {
         while (iterator.hasNext()) {
             Pessoa funcionario = iterator.next();
             if (funcionario.getNome().equals(nome)) {
-                System.out.println("Removendo o funcionario...\n" + funcionario.toString());
+                System.out.println("Removendo o funcionario...\n" + funcionario);
                 retirarFuncionario = true;
+                dao.removerFuncionario(this, (Pessoa) iterator);
                 iterator.remove();
                 System.out.println();
             }
@@ -91,36 +100,55 @@ public class RH extends Funcionario implements PropriedadesSetor {
     }
 
     public void alterarFuncionario(String nome, double newSalario) {
-        for (Pessoa funcionario : funcionarios) {
-            if (funcionario.getNome().equals(nome)) {
-                mudarSalario(this, (Funcionario) funcionario, newSalario);
+        try {
+            for (Pessoa funcionario : funcionarios) {
+                if (funcionario.getNome().equals(nome)) {
+                    mudarSalario(this, (Funcionario) funcionario, newSalario);
+                }
             }
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
         }
     }
 
     public void alterarFuncionario(String nome, Setor setor) {
-        for (Pessoa funcionario: funcionarios) {
-            if (funcionario.getNome().equals(nome)) {
-                mudarSetor(this, (Funcionario) funcionario, setor);
+        try {
+            for (Pessoa funcionario : funcionarios) {
+                if (funcionario.getNome().equals(nome)) {
+                    mudarSetor(this, (Funcionario) funcionario, setor);
+                }
             }
+        }
+        catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
         }
     }
 
     public void alterarFuncionario(String nome, Turno turno) {
-        for (Pessoa funcionario : funcionarios) {
-            if (funcionario.getNome().equals(nome)) {
-                mudarTurno(this, (Funcionario) funcionario, turno);
+        try {
+            for (Pessoa funcionario : funcionarios) {
+                if (funcionario.getNome().equals(nome)) {
+                    mudarTurno(this, (Funcionario) funcionario, turno);
+                }
             }
+        }
+        catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
         }
     }
 
     public void alterarFuncionario(String nome, double newSalario, Setor setor, Turno turno) {
-        for (Pessoa funcionario : funcionarios) {
-            if (funcionario.getNome().equals(nome)) {
-                mudarSalario(this, (Funcionario) funcionario, newSalario);
-                mudarSetor(this, (Funcionario) funcionario, setor);
-                mudarTurno(this, (Funcionario) funcionario, turno);
+        try {
+            for (Pessoa funcionario : funcionarios) {
+                if (funcionario.getNome().equals(nome)) {
+                    mudarSalario(this, (Funcionario) funcionario, newSalario);
+                    mudarSetor(this, (Funcionario) funcionario, setor);
+                    mudarTurno(this, (Funcionario) funcionario, turno);
+                }
             }
+        }
+        catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
         }
     }
 

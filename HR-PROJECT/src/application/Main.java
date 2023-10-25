@@ -37,16 +37,16 @@ public class Main {
             Pessoa roberto = new Funcionario("Roberto Silva", "12312312312", dtNascimentoRoberto,
                     setorRoberto, 8567.50, "12343212", "Mecânico", turnoRoberto);
 
-            Pessoa jose = new RH("José Silva", "12312312312", dtNascimentoJose, setorJose,
+            Pessoa jose = new RH("José Silva", "23455234523", dtNascimentoJose, setorJose,
                     12900.50, "12343212", "Administrador", turnoJose);
 
             jequitiba.adicionarPessoas(roberto);
             jequitiba.adicionarPessoas(jose);
 
-            dataBase.addPessoa(roberto);
-            dataBase.addPessoa(jose);
+            System.out.println("Database: ");
 
             dataBase.listagemPessoas();
+            System.out.println();
 
             ((RH) jose).adicionarFuncionario(jequitiba, "Ricardo Silva", "12312312317", dtNascimentoRicardo,
                     setorRicardo, 6754.76, "12343212", "Estoquista", turnoRicardo);
@@ -57,16 +57,13 @@ public class Main {
 
             ((RH) jose).alterarFuncionario("Roberto Silva", 10000, Setor.COMPRAS, Turno.MANHA);
 
-            //((RH) jose).removerFuncionario(jequitiba, "Kleber"); // Vai entrar na exceção quando for ativado
-            // pois não existe ninguém com este nome.
-
             System.out.println();
             System.out.println("ATUALIZADO: ");
             System.out.println();
 
             jequitiba.informacoesFuncionarios();
 
-            System.out.println(jequitiba.toString());
+            System.out.println(jequitiba);
 
         }
         catch (ParseException e) {
