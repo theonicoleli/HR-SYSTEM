@@ -86,7 +86,7 @@ public class RH extends Funcionario implements PropriedadesSetor {
     }
 
     public void removerFuncionario(Pessoa funcionario) {
-        if (funcionario instanceof Funcionario && dao.funcionariosDb(funcionario.getCpf(), false)) {
+        if (funcionario instanceof Funcionario && dao.funcionariosDb(funcionario.getCpf(), false) == false) {
             dao.removerFuncionario(this, funcionario);
         }
     }
