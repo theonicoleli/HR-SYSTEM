@@ -34,15 +34,17 @@ public class Funcionario extends Pessoa implements PropriedadesSetor {
 
     protected void mudarSalario(Funcionario administrador, Funcionario funcionario, double newSalario) throws SQLException {
         if (administrador instanceof RH) {
+            dao = new DAO();
             funcionario.setSalario(administrador, funcionario, newSalario);
             Connection con = dao.conectar();
-            if (dao.possivelAlteracao(administrador, funcionario)) {
-                String changingData = "UPDATE FUNCIONARIO SET SALARIO = ? WHERE CPF = ?";
+            if (dao.possivelAlteracao(administrador, funcionario) == false) {
+                String changingData = "UPDATE FUNCIONARIOS SET SALARIO = ? WHERE CPF = ?";
                 PreparedStatement preparedStatement = con.prepareStatement(changingData);
                 preparedStatement.setDouble(1, newSalario);
                 preparedStatement.setString(2, funcionario.getCpf());
                 int rowsAffected = preparedStatement.executeUpdate();
                 System.out.println("Salário de " + funcionario.getNome() + " atualizado para: " + newSalario);
+                dao.printPessoa(funcionario.getCpf());
                 if (rowsAffected == 0) {
                     System.out.println("Nenhum registro foi atualizado. Verifique o CPF.");
                 }
@@ -57,8 +59,8 @@ public class Funcionario extends Pessoa implements PropriedadesSetor {
         if (administrador instanceof RH) {
             funcionario.setSetor(administrador, funcionario, setor);
             Connection con = dao.conectar();
-            if (dao.possivelAlteracao(administrador, funcionario)) {
-                String changingData = "UPDATE FUNCIONARIO SET NomeSetor = ? WHERE CPF = ?";
+            if (dao.possivelAlteracao(administrador, funcionario) == false) {
+                String changingData = "UPDATE FUNCIONARIOS SET NomeSetor = ? WHERE CPF = ?";
                 PreparedStatement preparedStatement = con.prepareStatement(changingData);
                 preparedStatement.setString(1, String.valueOf(setor));
                 preparedStatement.setString(2, funcionario.getCpf());
@@ -78,8 +80,8 @@ public class Funcionario extends Pessoa implements PropriedadesSetor {
         if (administrador instanceof RH) {
             funcionario.setTurno(administrador, funcionario, turno);
             Connection con = dao.conectar();
-            if (dao.possivelAlteracao(administrador, funcionario)) {
-                String changingData = "UPDATE FUNCIONARIO SET Turno = ? WHERE CPF = ?";
+            if (dao.possivelAlteracao(administrador, funcionario) == false) {
+                String changingData = "UPDATE FUNCIONARIOS SET Turno = ? WHERE CPF = ?";
                 PreparedStatement preparedStatement = con.prepareStatement(changingData);
                 preparedStatement.setString(1, String.valueOf(turno));
                 preparedStatement.setString(2, funcionario.getCpf());

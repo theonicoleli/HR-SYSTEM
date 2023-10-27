@@ -30,38 +30,27 @@ public class Main {
             Date dtNascimentoJose = dateFormat.parse("05/08/1999");
             Turno turnoJose = Turno.MANHA;
 
-            Setor setorRicardo = Setor.ESTOQUE;
-            Date dtNascimentoRicardo = dateFormat.parse("17/04/2000");
-            Turno turnoRicardo = Turno.TARDE;
+            Setor setorFelipe = Setor.ESTOQUE;
+            Date dtNascimentoFelipe = dateFormat.parse("17/04/2000");
+            Turno turnoFelipe = Turno.TARDE;
 
-            Pessoa roberto = new Funcionario("Roberto Silva", "12312312312", dtNascimentoRoberto,
-                    setorRoberto, 8567.50, "12343212", "Mecânico", turnoRoberto);
-
-            Pessoa jose = new RH("José Silva", "23455234523", dtNascimentoJose, setorJose,
+            Pessoa jose = new RH("José Silva", "12312312312", dtNascimentoJose, setorJose,
                     12900.50, "12343212", "Administrador", turnoJose);
 
-            jequitiba.adicionarPessoas(roberto);
-            jequitiba.adicionarPessoas(jose);
+            Pessoa felipe = new RH("Felipe Souza", "78453423487", dtNascimentoFelipe, setorFelipe,
+                    13500.30, "127895423", "Contador de produtos", turnoFelipe);
 
             System.out.println("Database: ");
 
             dataBase.listagemPessoas();
             System.out.println();
 
-            ((RH) jose).adicionarFuncionario(jequitiba, "Ricardo Silva", "12312312317", dtNascimentoRicardo,
-                    setorRicardo, 6754.76, "12343212", "Estoquista", turnoRicardo);
-
-            ((RH) jose).informacoesFuncionarios(jequitiba);
-
-            ((RH) jose).removerFuncionario(jequitiba, "Ricardo Silva");
-
-            ((RH) jose).alterarFuncionario("Roberto Silva", 10000, Setor.COMPRAS, Turno.MANHA);
+            ((RH) jose).alterarFuncionario("78453423487", 10000);
 
             System.out.println();
             System.out.println("ATUALIZADO: ");
             System.out.println();
-
-            jequitiba.informacoesFuncionarios();
+            ((RH) jose).infoFuncionario("78453423487");
 
             System.out.println(jequitiba);
 
@@ -72,5 +61,8 @@ public class Main {
         catch (FuncionarioException e) {
             System.out.println("Error: " + e.getMessage());
         }
+        /*catch (NullPointerException e) {
+            System.out.println("Error: " + e.getMessage());
+        }*/
     }
 }

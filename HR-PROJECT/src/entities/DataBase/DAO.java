@@ -4,15 +4,20 @@ import entities.Funcionario;
 import entities.FuncionarioException;
 import entities.Pessoa;
 import entities.RH;
+import entities.enumerator.Setor;
+import entities.enumerator.Turno;
+import entities.records.RHTABLE;
 
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 public class DAO {
 
-    private RH rh;
     private Connection con;
+    private RHTABLE rhtable;
+    private SimpleDateFormat sdf;
     private String driver = "com.mysql.cj.jdbc.Driver";
     private String user = "root";
     private String password = "PUC@1234";
@@ -20,6 +25,9 @@ public class DAO {
 
     public DAO() {
         con = conectar();
+        sdf = new SimpleDateFormat("dd/MM/yyyy");
+        rhtable = new RHTABLE(new ArrayList<>());
+        pegandoFuncionariosBd();
     }
 
     public Connection conectar() {
@@ -35,7 +43,7 @@ public class DAO {
 
     public boolean possivelAlteracao(Pessoa rh, Pessoa funcionario) {
         if (funcionario instanceof Funcionario && rh instanceof RH &&
-                ((RH) rh).verificandoFuncionarioExistente(funcionario.getCpf())) {
+                this.funcionariosDb(funcionario.getCpf(), false)) {
             return true;
         }
         return false;
@@ -50,7 +58,7 @@ public class DAO {
     public void listagemPessoas() {
         try {
             Statement statement = con.createStatement();
-            ResultSet rsPessoas = statement.executeQuery("SELECT * FROM Funcionario;");
+            ResultSet rsPessoas = statement.executeQuery("SELECT * FROM Funcionarios;");
             while (rsPessoas.next()) {
                 System.out.println("Nome: " + rsPessoas.getString("Nome"));
                 System.out.println("Data de nascimento: " + rsPessoas.getString("DataNasc"));
@@ -69,7 +77,7 @@ public class DAO {
         try {
             if (possivelAlteracao(rh, funcionario)){
                 Funcionario func = (Funcionario) funcionario;
-                PreparedStatement preparedStatement = con.prepareStatement("INSERT INTO Funcionario (Nome, DataNasc, Salario, Cpf, NomeSetor, Turno, CarteiraTrabalho) VALUES (?, ?, ?, ?, ?, ?, ?)");
+                PreparedStatement preparedStatement = con.prepareStatement("INSERT INTO Funcionarios (Nome, DataNasc, Salario, Cpf, NomeSetor, Turno, CarteiraTrabalho) VALUES (?, ?, ?, ?, ?, ?, ?)");
                 preparedStatement.setString(1, func.getNome());
 
                 // Converter a data de String para java.sql.Date (formato "dd/MM/yyyy")
@@ -100,7 +108,7 @@ public class DAO {
         try {
             if (possivelAlteracao(rh, funcionario)) {
                 Funcionario func = (Funcionario) funcionario;
-                String deleteSQL = "DELETE FROM FUNCIONARIO WHERE CPF = ?";
+                String deleteSQL = "DELETE FROM FUNCIONARIOS WHERE CPF = ?";
                 PreparedStatement preparedStatement = con.prepareStatement(deleteSQL);
                 preparedStatement.setString(1, func.getCpf());
                 preparedStatement.executeUpdate();
@@ -109,6 +117,92 @@ public class DAO {
             else {
                 throw new FuncionarioException("Ocorreu um erro, não foi possível a exclusão do funcionário " + funcionario.getNome() + ".");
             }
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    public ArrayList<? super Pessoa> pegandoFuncionariosBd() {
+        try {
+            Connection connection = DriverManager.getConnection(url, user, password);
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM Funcionarios");
+
+            while (resultSet.next()) {
+                String nome = resultSet.getString("nome");
+                String cpfSearch = resultSet.getString("cpf");
+                Date dtNascimento = resultSet.getDate("DataNasc");
+                Double salario = resultSet.getDouble("salario");
+                Turno turno = Turno.valueOf(resultSet.getString("turno"));
+                String carteiraTrabalho = resultSet.getString("CarteiraTrabalho");
+                Setor nomeSetor = Setor.valueOf(resultSet.getString("NomeSetor"));
+                String funcao = resultSet.getString("Funcao");
+
+                Pessoa func = new Funcionario(nome, cpfSearch, dtNascimento,
+                        nomeSetor, salario, carteiraTrabalho, funcao, turno);
+
+                rhtable.addFuncionarioList(func);
+            }
+
+            return rhtable.funcionarios();
+        }
+        catch (SQLException e){
+            System.out.println("Error: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public boolean funcionariosDb(String cpf, boolean excecao) {
+        try {
+            Connection connection = DriverManager.getConnection(url, user, password);
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM Funcionarios");
+
+            while (resultSet.next()) {
+                String cpfSearch = resultSet.getString("cpf");
+
+                if (cpfSearch.equals(cpf)) {
+                    if (excecao) {
+                        throw new FuncionarioException("Funcionário já existente, reveja o cpf.");
+                    }
+                    return false;
+                }
+            }
+
+            resultSet.close();
+            statement.close();
+            connection.close();
+
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public int sizeOfTable() {
+        return rhtable.sizeOfList();
+    }
+
+    public void printPessoa(String cpf) {
+        try {
+            Connection connection = DriverManager.getConnection(url, user, password);
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM Funcionarios");
+
+            while (resultSet.next()) {
+                String cpfSearch = resultSet.getString("cpf");
+                Double doubleSalario = resultSet.getDouble("salario");
+
+                if (cpfSearch.equals(cpf)) {
+                    System.out.println(doubleSalario);
+                }
+            }
+
+            resultSet.close();
+            statement.close();
+            connection.close();
+
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         }
