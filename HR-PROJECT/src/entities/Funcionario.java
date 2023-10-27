@@ -34,6 +34,7 @@ public class Funcionario extends Pessoa implements PropriedadesSetor {
 
     protected void mudarSalario(Funcionario administrador, Funcionario funcionario, double newSalario) throws SQLException {
         if (administrador instanceof RH) {
+            System.out.println("ENTREI");
             funcionario.setSalario(administrador, funcionario, newSalario);
             Connection con = dao.conectar();
             if (dao.possivelAlteracao(administrador, funcionario)) {

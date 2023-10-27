@@ -1,11 +1,14 @@
 package entities;
 
+import entities.DataBase.DAO;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class Empresa {
 
+    private DAO dao;
     private final String nome;
     private ArrayList<Pessoa> pessoas;
     private final Date companyAge;
@@ -18,22 +21,7 @@ public class Empresa {
         this.companyAge = companyAge;
         this.balance = balance;
         pessoas = new ArrayList<>();
-    }
-
-    public void adicionarPessoas(Pessoa pessoa) {
-        for (Pessoa pessoa1: pessoas) {
-            if (pessoa1.equals(pessoa)) {
-                throw new FuncionarioException("Pessoa já existente na lista de funcionários.");
-            }
-        }
-        pessoas.add(pessoa);
-    }
-
-    public void informacoesFuncionarios() {
-        for (Pessoa pessoa : pessoas) {
-            System.out.println(pessoa.toString());
-            System.out.println();
-        }
+        dao = new DAO();
     }
 
     public ArrayList<Pessoa> getPessoas(Pessoa pessoa) {
@@ -41,10 +29,6 @@ public class Empresa {
             return pessoas;
         }
         throw new FuncionarioException("Apenas o RH, tem direito de pegar dados de todos os funcionários.");
-    }
-
-    public void atualizandoLista(ArrayList<Pessoa> funcionarios) {
-        pessoas = funcionarios;
     }
 
     public String getNome() {

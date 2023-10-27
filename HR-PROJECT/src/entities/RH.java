@@ -22,69 +22,51 @@ public class RH extends Funcionario implements PropriedadesSetor {
         super(nome, cpf, dtNascimento,
                 setor, salario, carteiraTrabalho,
                 funcao, turno);
-    }
-
-    private void copiandoListaPessoas(Empresa empresa) {
-        funcionarios = empresa.getPessoas(this);
-    }
-
-    private void atualizandoLista(Empresa empresa) {
-        empresa.atualizandoLista(funcionarios);
-    }
-
-    private void confirmandoPessoas(Empresa empresa) {
-        if (funcionarios.size() == 0) {
-            copiandoListaPessoas(empresa);
-        }
+        this.dao = new DAO();
     }
 
     public void informacoesFuncionarios(Empresa empresa) {
-        copiandoListaPessoas(empresa);
         for (Pessoa funcionario : funcionarios) {
             if (funcionario instanceof Funcionario) {
-                System.out.println(funcionario.toString());
+                System.out.println(funcionario);
                 System.out.println();
             }
         }
     }
 
     public boolean verificandoFuncionarioExistente(String cpf) {
-        for (Pessoa funcionario : funcionarios) {
-            if (funcionario.getCpf().equals(cpf)) {
-                throw new FuncionarioException("Funcionario já existente.");
-            }
-        }
-        return true;
+        if (dao.funcionariosDb(cpf)) return true;
+        return false;
     }
 
-    public void adicionarFuncionario(Empresa empresa, String nome, String cpf,
+    public void adicionarFuncionario(Pessoa funcionario) {
+        if (funcionario instanceof Funcionario && verificandoFuncionarioExistente(funcionario.getCpf())) {
+            dao.addPessoa(this, funcionario);
+        }
+    }
+
+    public void adicionarFuncionario(String nome, String cpf,
                          Date dtNascimento, Setor setor,
                          double salario, String carteiraTrabalho,
                          String funcao, Turno turno) {
-
-        confirmandoPessoas(empresa);
-
         if (verificandoFuncionarioExistente(cpf)) {
              Funcionario func = new Funcionario(nome, cpf, dtNascimento,
                     setor, salario, carteiraTrabalho,
                     funcao, turno);
              funcionarios.add(func);
-             atualizandoLista(empresa);
              dao.addPessoa(this, func);
         }
     }
 
-    public void removerFuncionario(Empresa empresa, String nome) {
-        confirmandoPessoas(empresa);
+    public void removerFuncionario(String cpf) {
 
         Iterator<Pessoa> iterator = funcionarios.iterator();
         while (iterator.hasNext()) {
             Pessoa funcionario = iterator.next();
-            if (funcionario.getNome().equals(nome)) {
+            if (funcionario.getCpf().equals(cpf)) {
                 System.out.println("Removendo o funcionario...\n" + funcionario);
                 retirarFuncionario = true;
                 dao.removerFuncionario(this, (Pessoa) iterator);
-                iterator.remove();
                 System.out.println();
             }
         }
@@ -93,7 +75,12 @@ public class RH extends Funcionario implements PropriedadesSetor {
         }
 
         retirarFuncionario = false;
-        atualizandoLista(empresa);
+    }
+
+    public void removerFuncionario(Pessoa funcionario) {
+        if (funcionario instanceof Funcionario && verificandoFuncionarioExistente(getCpf()) != true) {
+            dao.removerFuncionario(this, funcionario);
+        }
     }
 
     public void alterarFuncionario(String nome, double newSalario) {

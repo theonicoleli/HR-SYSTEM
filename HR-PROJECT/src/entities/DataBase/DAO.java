@@ -113,4 +113,29 @@ public class DAO {
             System.out.println("Error: " + e.getMessage());
         }
     }
+
+    public boolean funcionariosDb(String cpf) {
+        try {
+            Connection connection = DriverManager.getConnection(url, user, password);
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM Funcionarios");
+
+            while (resultSet.next()) {
+                String cpfSearch = resultSet.getString("cpf");
+
+                if (cpfSearch.equals(cpf)) {
+                    throw new FuncionarioException("Funcionário já existente, reveja o cpf.");
+                }
+            }
+
+            resultSet.close();
+            statement.close();
+            connection.close();
+
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

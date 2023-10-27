@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b34390f2-6c69-4170-a941-eed8973209f9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/HR-PROJECT/src/application/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/HR-PROJECT/src/application/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HR-PROJECT/src/entities/DataBase/DAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/HR-PROJECT/src/entities/DataBase/DAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HR-PROJECT/src/entities/Funcionario.java" beforeDir="false" afterPath="$PROJECT_DIR$/HR-PROJECT/src/entities/Funcionario.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HR-PROJECT/src/entities/RH.java" beforeDir="false" afterPath="$PROJECT_DIR$/HR-PROJECT/src/entities/RH.java" afterDir="false" />
-    </list>
+    <list default="true" id="b34390f2-6c69-4170-a941-eed8973209f9" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -18,22 +13,25 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": -1
-}]]></component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: -1
+}</component>
   <component name="ProjectId" id="2XG4inXErFgdt5EwZG7edReLqDQ" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="20" />
