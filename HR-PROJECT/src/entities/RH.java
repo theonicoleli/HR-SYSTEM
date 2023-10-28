@@ -3,18 +3,15 @@ package entities;
 import entities.DataBase.DAO;
 import entities.enumerator.Setor;
 import entities.enumerator.Turno;
-import entities.records.RHTABLE;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
+import java.util.*;
 
 public class RH extends Funcionario implements PropriedadesSetor {
 
     private DAO dao;
     private boolean retirarFuncionario;
-    private ArrayList<Pessoa> funcionarios;
+    private Set<Pessoa> funcionarios;
 
     public RH(String nome, String cpf,
               Date dtNascimento, Setor setor,
@@ -25,11 +22,14 @@ public class RH extends Funcionario implements PropriedadesSetor {
                 funcao, turno);
         this.dao = new DAO();
         if (dao.sizeOfTable() > 0) {
-            funcionarios = (ArrayList<Pessoa>) dao.pegandoFuncionariosBd();
+            funcionarios = (HashSet<Pessoa>) dao.pegandoFuncionariosBd();
+        } else {
+            funcionarios = new HashSet<>();
         }
     }
 
     public void informacoesFuncionarios() {
+        System.out.println(funcionarios.size());
         for (Pessoa funcionario : funcionarios) {
             if (funcionario instanceof Funcionario) {
                 System.out.println(funcionario);
@@ -47,7 +47,6 @@ public class RH extends Funcionario implements PropriedadesSetor {
     }
 
     public void adicionarFuncionario(Pessoa funcionario) {
-        System.out.println("ENTREI");
         if (funcionario instanceof Funcionario && dao.funcionariosDb(funcionario.getCpf(), true)) {
             dao.addPessoa(this, funcionario);
         }
@@ -67,19 +66,20 @@ public class RH extends Funcionario implements PropriedadesSetor {
     }
 
     public void removerFuncionario(String cpf) {
-
         Iterator<Pessoa> iterator = funcionarios.iterator();
+
         while (iterator.hasNext()) {
             Pessoa funcionario = iterator.next();
             if (funcionario.getCpf().equals(cpf)) {
                 System.out.println("Removendo o funcionario...\n" + funcionario);
                 retirarFuncionario = true;
-                dao.removerFuncionario(this, (Pessoa) iterator);
+                dao.removerFuncionario(this, funcionario);
                 System.out.println();
+                return;
             }
         }
         if (retirarFuncionario != true) {
-            throw new FuncionarioException("Não existe nenhum funcionário com este nome.");
+            throw new FuncionarioException("Não existe nenhum funcionário com este CPF.");
         }
 
         retirarFuncionario = false;

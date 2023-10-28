@@ -37,20 +37,28 @@ public class Main {
             Pessoa jose = new RH("José Silva", "12312312312", dtNascimentoJose, setorJose,
                     12900.50, "12343212", "Administrador", turnoJose);
 
-            Pessoa felipe = new RH("Felipe Souza", "78453423487", dtNascimentoFelipe, setorFelipe,
+            Pessoa felipe = new Funcionario("Felipe Souza", "78453423487", dtNascimentoFelipe, setorFelipe,
                     13500.30, "127895423", "Contador de produtos", turnoFelipe);
+
+            //((RH) jose).adicionarFuncionario(felipe);
+            //((RH) jose).adicionarFuncionario(jose);
 
             System.out.println("Database: ");
 
-            dataBase.listagemPessoas();
+            ((RH) jose).informacoesFuncionarios();
             System.out.println();
 
-            ((RH) jose).alterarFuncionario("78453423487", 10000);
+            ((RH) jose).alterarFuncionario("78453423487", 3500);
+
+            ((RH) jose).informacoesFuncionarios();
 
             System.out.println();
             System.out.println("ATUALIZADO: ");
             System.out.println();
             ((RH) jose).infoFuncionario("78453423487");
+
+            //((RH) jose).removerFuncionario("78453423487");
+            //((RH) jose).removerFuncionario("12312312312");
 
             System.out.println(jequitiba);
 

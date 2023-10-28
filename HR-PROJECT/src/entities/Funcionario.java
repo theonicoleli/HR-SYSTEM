@@ -37,7 +37,7 @@ public class Funcionario extends Pessoa implements PropriedadesSetor {
             dao = new DAO();
             funcionario.setSalario(administrador, funcionario, newSalario);
             Connection con = dao.conectar();
-            if (dao.possivelAlteracao(administrador, funcionario) == false) {
+            if (dao.possivelAlteracao(administrador, funcionario)) {
                 String changingData = "UPDATE FUNCIONARIOS SET SALARIO = ? WHERE CPF = ?";
                 PreparedStatement preparedStatement = con.prepareStatement(changingData);
                 preparedStatement.setDouble(1, newSalario);
@@ -59,7 +59,7 @@ public class Funcionario extends Pessoa implements PropriedadesSetor {
         if (administrador instanceof RH) {
             funcionario.setSetor(administrador, funcionario, setor);
             Connection con = dao.conectar();
-            if (dao.possivelAlteracao(administrador, funcionario) == false) {
+            if (dao.possivelAlteracao(administrador, funcionario)) {
                 String changingData = "UPDATE FUNCIONARIOS SET NomeSetor = ? WHERE CPF = ?";
                 PreparedStatement preparedStatement = con.prepareStatement(changingData);
                 preparedStatement.setString(1, String.valueOf(setor));
@@ -80,7 +80,7 @@ public class Funcionario extends Pessoa implements PropriedadesSetor {
         if (administrador instanceof RH) {
             funcionario.setTurno(administrador, funcionario, turno);
             Connection con = dao.conectar();
-            if (dao.possivelAlteracao(administrador, funcionario) == false) {
+            if (dao.possivelAlteracao(administrador, funcionario)) {
                 String changingData = "UPDATE FUNCIONARIOS SET Turno = ? WHERE CPF = ?";
                 PreparedStatement preparedStatement = con.prepareStatement(changingData);
                 preparedStatement.setString(1, String.valueOf(turno));

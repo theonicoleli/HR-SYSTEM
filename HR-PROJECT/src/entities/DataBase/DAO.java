@@ -12,6 +12,9 @@ import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class DAO {
 
@@ -26,7 +29,7 @@ public class DAO {
     public DAO() {
         con = conectar();
         sdf = new SimpleDateFormat("dd/MM/yyyy");
-        rhtable = new RHTABLE(new ArrayList<>());
+        rhtable = new RHTABLE(new HashSet<>());
         pegandoFuncionariosBd();
     }
 
@@ -43,7 +46,7 @@ public class DAO {
 
     public boolean possivelAlteracao(Pessoa rh, Pessoa funcionario) {
         if (funcionario instanceof Funcionario && rh instanceof RH &&
-                this.funcionariosDb(funcionario.getCpf(), false)) {
+                this.funcionariosDb(funcionario.getCpf(), false) == false) {
             return true;
         }
         return false;
@@ -75,28 +78,25 @@ public class DAO {
     }
     public void addPessoa(Pessoa rh, Pessoa funcionario) {
         try {
-            if (possivelAlteracao(rh, funcionario)){
-                Funcionario func = (Funcionario) funcionario;
-                PreparedStatement preparedStatement = con.prepareStatement("INSERT INTO Funcionarios (Nome, DataNasc, Salario, Cpf, NomeSetor, Turno, CarteiraTrabalho) VALUES (?, ?, ?, ?, ?, ?, ?)");
-                preparedStatement.setString(1, func.getNome());
+            Funcionario func = (Funcionario) funcionario;
+            PreparedStatement preparedStatement = con.prepareStatement("INSERT INTO Funcionarios (Nome, DataNasc, Salario, Cpf, NomeSetor, Turno, CarteiraTrabalho, funcao) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            preparedStatement.setString(1, func.getNome());
 
-                // Converter a data de String para java.sql.Date (formato "dd/MM/yyyy")
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                java.util.Date parsedDate = dateFormat.parse(func.getDtNascimento());
-                java.sql.Date sqlDate = new java.sql.Date(parsedDate.getTime());
+            // Converter a data de String para java.sql.Date (formato "dd/MM/yyyy")
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            java.util.Date parsedDate = dateFormat.parse(func.getDtNascimento());
+            java.sql.Date sqlDate = new java.sql.Date(parsedDate.getTime());
 
-                preparedStatement.setDate(2, sqlDate);
-                preparedStatement.setDouble(3, func.getSalario());
-                preparedStatement.setString(4, func.getCpf());
-                preparedStatement.setString(5, func.getSetor());
-                preparedStatement.setString(6, func.getTurno());
-                preparedStatement.setString(7, func.getCarteiraTrabalho());
+            preparedStatement.setDate(2, sqlDate);
+            preparedStatement.setDouble(3, func.getSalario());
+            preparedStatement.setString(4, func.getCpf());
+            preparedStatement.setString(5, func.getSetor());
+            preparedStatement.setString(6, func.getTurno());
+            preparedStatement.setString(7, func.getCarteiraTrabalho());
+            preparedStatement.setString(8, func.getFuncao());
 
-                preparedStatement.executeUpdate();
-                preparedStatement.close();
-            } else {
-                throw new FuncionarioException("Ocorreu um erro, não foi possível a inserção de um novo funcionário.");
-            }
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
         } catch (ParseException e) {
@@ -122,7 +122,7 @@ public class DAO {
         }
     }
 
-    public ArrayList<? super Pessoa> pegandoFuncionariosBd() {
+    public Set<? super Pessoa> pegandoFuncionariosBd() {
         try {
             Connection connection = DriverManager.getConnection(url, user, password);
             Statement statement = connection.createStatement();
@@ -141,7 +141,9 @@ public class DAO {
                 Pessoa func = new Funcionario(nome, cpfSearch, dtNascimento,
                         nomeSetor, salario, carteiraTrabalho, funcao, turno);
 
-                rhtable.addFuncionarioList(func);
+                if (rhtable.contains(func) == false) {
+                    rhtable.addFuncionarioList(func);
+                }
             }
 
             return rhtable.funcionarios();
