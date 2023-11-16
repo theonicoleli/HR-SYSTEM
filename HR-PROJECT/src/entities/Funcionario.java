@@ -76,6 +76,27 @@ public class Funcionario extends Pessoa implements PropriedadesSetor {
         }
     }
 
+    protected void mudarFuncao(Funcionario administrador, Funcionario funcionario, String funcao) throws SQLException {
+        if (administrador instanceof RH) {
+            funcionario.setFuncao(administrador, funcionario, funcao);
+            Connection con = dao.conectar();
+            if (dao.possivelAlteracao(administrador, funcionario)) {
+                String changingData = "UPDATE FUNCIONARIOS SET Funcao = ? WHERE CPF = ?";
+                PreparedStatement preparedStatement = con.prepareStatement(changingData);
+                preparedStatement.setString(1, funcao);
+                preparedStatement.setString(2, funcionario.getCpf());
+                int rowsAffected = preparedStatement.executeUpdate();
+                System.out.println("Função de " + funcionario.getNome() + " atualizado para: " + funcao);
+                if (rowsAffected == 0) {
+                    System.out.println("Nenhum registro foi atualizado. Verifique o CPF.");
+                }
+                preparedStatement.close();
+            }
+        } else {
+            throw new FuncionarioException("Você não tem permissão de alterar o turno de outros funcionários.");
+        }
+    }
+
     protected void mudarTurno(Funcionario administrador, Funcionario funcionario, Turno turno) throws SQLException {
         if (administrador instanceof RH) {
             funcionario.setTurno(administrador, funcionario, turno);
@@ -100,6 +121,14 @@ public class Funcionario extends Pessoa implements PropriedadesSetor {
     public void setTurno(Funcionario administrador, Funcionario funcionario, Turno turno) {
         if (administrador instanceof RH) {
             funcionario.turno = turno;
+        } else {
+            throw new FuncionarioException("Você não tem permissão de alterar o turno de outros funcionários.");
+        }
+    }
+
+    public void setFuncao(Funcionario administrador, Funcionario funcionario, String funcao) {
+        if (administrador instanceof RH) {
+            funcionario.funcao = funcao;
         } else {
             throw new FuncionarioException("Você não tem permissão de alterar o turno de outros funcionários.");
         }

@@ -7,18 +7,19 @@ import entities.RH;
 import entities.enumerator.Setor;
 import entities.enumerator.Turno;
 import entities.records.RHTABLE;
+import entities.records.SessaoAtual;
 
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class DAO {
 
-    private Connection con;
+    private RH rh;
+    private static SessaoAtual session;
+    public Connection con;
     private RHTABLE rhtable;
     private SimpleDateFormat sdf;
     private String driver = "com.mysql.cj.jdbc.Driver";
@@ -137,9 +138,15 @@ public class DAO {
                 String carteiraTrabalho = resultSet.getString("CarteiraTrabalho");
                 Setor nomeSetor = Setor.valueOf(resultSet.getString("NomeSetor"));
                 String funcao = resultSet.getString("Funcao");
+                Pessoa func;
 
-                Pessoa func = new Funcionario(nome, cpfSearch, dtNascimento,
-                        nomeSetor, salario, carteiraTrabalho, funcao, turno);
+                if (nomeSetor.equals(Setor.RH)) {
+                    func = new RH(nome, cpfSearch, dtNascimento,
+                            nomeSetor, salario, carteiraTrabalho, funcao, turno);
+                } else {
+                    func = new Funcionario(nome, cpfSearch, dtNascimento,
+                            nomeSetor, salario, carteiraTrabalho, funcao, turno);
+                }
 
                 if (rhtable.contains(func) == false) {
                     rhtable.addFuncionarioList(func);
@@ -209,4 +216,121 @@ public class DAO {
             System.out.println("Error: " + e.getMessage());
         }
     }
+
+    public String verificarPessoa(String login) {
+        try {
+            Connection connection = DriverManager.getConnection(url, user, password);
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM Funcionarios");
+
+            while (resultSet.next()) {
+                String loginSearch = resultSet.getString("Login");
+                String senhaSearch = resultSet.getString("Senha");
+                String cpf = resultSet.getString("cpf");
+
+                if (loginSearch.equals(login)) {
+                    return rh.getFuncionario(cpf);
+                }
+            }
+            resultSet.close();
+            statement.close();
+            connection.close();
+            return null;
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public Pessoa pessoaDoRh(String login, String senha) {
+        try {
+            Connection connection = DriverManager.getConnection(url, user, password);
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM Funcionarios");
+
+            while (resultSet.next()) {
+                String loginSearch = resultSet.getString("Login");
+                String setor = resultSet.getString("NomeSetor");
+                String cpf = resultSet.getString("cpf");
+
+                if (loginSearch.equals(login) && setor.equalsIgnoreCase("rh")) {
+                    return RH.getFuncionarioRh(cpf);
+                }
+            }
+            resultSet.close();
+            statement.close();
+            connection.close();
+            return null;
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public boolean booleanPessoaDoRh(String login,String senha) {
+        try {
+            Connection connection = DriverManager.getConnection(url, user, password);
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM Funcionarios");
+
+            while (resultSet.next()) {
+                String loginSearch = resultSet.getString("Login");
+                String setor = resultSet.getString("NomeSetor");
+                String cpf = resultSet.getString("cpf");
+
+                if (loginSearch.equals(login) && setor.equalsIgnoreCase("rh")) {
+                    return true;
+                }
+            }
+            resultSet.close();
+            statement.close();
+            connection.close();
+            return false;
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public void setSession(SessaoAtual session) {
+        try {
+            Connection connection = DriverManager.getConnection(url, user, password);
+            String query = "SELECT * FROM Funcionarios WHERE LOGIN = ? AND SENHA = ?";
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setString(1, session.loginAtual());
+                preparedStatement.setString(2, session.senha());
+
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                if (resultSet.next()) {
+                    this.session = session;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    public static SessaoAtual getSessao() {
+        return session;
+    }
+    public static String pegarCPF(int linha){
+        DAO dataBase = new DAO();
+        try {
+            Statement st = dataBase.con.createStatement();
+            String sql = "SELECT CPF FROM funcionarios ORDER BY ID_Func LIMIT "+linha+",1;";
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                String cpf = String.valueOf(rs.getString("CPF"));
+                System.out.println(cpf);
+                return cpf;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+
 }

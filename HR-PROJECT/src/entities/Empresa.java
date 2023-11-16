@@ -10,7 +10,6 @@ public class Empresa {
 
     private DAO dao;
     private final String nome;
-    private ArrayList<Pessoa> pessoas;
     private final Date companyAge;
     private final double balance;
     protected SimpleDateFormat sdf;
@@ -20,15 +19,7 @@ public class Empresa {
         this.nome = nome;
         this.companyAge = companyAge;
         this.balance = balance;
-        pessoas = new ArrayList<>();
         dao = new DAO();
-    }
-
-    public ArrayList<Pessoa> getPessoas(Pessoa pessoa) {
-        if (pessoa instanceof RH) {
-            return pessoas;
-        }
-        throw new FuncionarioException("Apenas o RH, tem direito de pegar dados de todos os funcionários.");
     }
 
     public String getNome() {

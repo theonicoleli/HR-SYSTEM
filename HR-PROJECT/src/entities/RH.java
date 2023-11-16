@@ -9,9 +9,18 @@ import java.util.*;
 
 public class RH extends Funcionario implements PropriedadesSetor {
 
-    private DAO dao;
+    private static DAO dao;
     private boolean retirarFuncionario;
-    private Set<Pessoa> funcionarios;
+    private static Set<Pessoa> funcionarios;
+
+    static {
+        dao = new DAO();
+        if (dao.sizeOfTable() > 0) {
+            funcionarios = (HashSet<Pessoa>) dao.pegandoFuncionariosBd();
+        } else {
+            funcionarios = new HashSet<>();
+        }
+    }
 
     public RH(String nome, String cpf,
               Date dtNascimento, Setor setor,
@@ -20,12 +29,6 @@ public class RH extends Funcionario implements PropriedadesSetor {
         super(nome, cpf, dtNascimento,
                 setor, salario, carteiraTrabalho,
                 funcao, turno);
-        this.dao = new DAO();
-        if (dao.sizeOfTable() > 0) {
-            funcionarios = (HashSet<Pessoa>) dao.pegandoFuncionariosBd();
-        } else {
-            funcionarios = new HashSet<>();
-        }
     }
 
     public void informacoesFuncionarios() {
@@ -36,6 +39,33 @@ public class RH extends Funcionario implements PropriedadesSetor {
                 System.out.println();
             }
         }
+    }
+
+    public String getFuncionario(String cpf) {
+        for (Pessoa funcionario : funcionarios) {
+            if (funcionario instanceof Funcionario && funcionario.getCpf().equals(cpf)) {
+                return ((Funcionario) funcionario).getSetor();
+            }
+        }
+        return null;
+    }
+
+    public Funcionario getFunc(String cpf) {
+        for (Pessoa funcionario : funcionarios) {
+            if (funcionario instanceof Funcionario && funcionario.getCpf().equals(cpf)) {
+                return (Funcionario) funcionario;
+            }
+        }
+        return null;
+    }
+
+    public static RH getFuncionarioRh(String cpf) {
+        for (Pessoa funcionario : funcionarios) {
+            if (funcionario instanceof RH && funcionario.getCpf().equals(cpf)) {
+                return (RH) funcionario;
+            }
+        }
+        return null;
     }
 
     public void infoFuncionario(String cpf){
@@ -49,6 +79,7 @@ public class RH extends Funcionario implements PropriedadesSetor {
     public void adicionarFuncionario(Pessoa funcionario) {
         if (funcionario instanceof Funcionario && dao.funcionariosDb(funcionario.getCpf(), true)) {
             dao.addPessoa(this, funcionario);
+            funcionarios.add(funcionario);
         }
     }
 
@@ -74,6 +105,7 @@ public class RH extends Funcionario implements PropriedadesSetor {
                 System.out.println("Removendo o funcionario...\n" + funcionario);
                 retirarFuncionario = true;
                 dao.removerFuncionario(this, funcionario);
+                funcionarios.remove(funcionario);
                 System.out.println();
                 return;
             }
@@ -88,6 +120,7 @@ public class RH extends Funcionario implements PropriedadesSetor {
     public void removerFuncionario(Pessoa funcionario) {
         if (funcionario instanceof Funcionario && dao.funcionariosDb(funcionario.getCpf(), false) == false) {
             dao.removerFuncionario(this, funcionario);
+            funcionarios.remove(funcionario);
         }
     }
 
@@ -136,6 +169,22 @@ public class RH extends Funcionario implements PropriedadesSetor {
                     mudarSalario(this, (Funcionario) funcionario, newSalario);
                     mudarSetor(this, (Funcionario) funcionario, setor);
                     mudarTurno(this, (Funcionario) funcionario, turno);
+                }
+            }
+        }
+        catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    public void alterarFuncionario(String cpf, double newSalario, Setor setor, Turno turno, String funcao) {
+        try {
+            for (Pessoa funcionario : funcionarios) {
+                if (funcionario.getCpf().equals(cpf)) {
+                    mudarSalario(this, (Funcionario) funcionario, newSalario);
+                    mudarSetor(this, (Funcionario) funcionario, setor);
+                    mudarTurno(this, (Funcionario) funcionario, turno);
+                    mudarFuncao(this, (Funcionario) funcionario, funcao);
                 }
             }
         }

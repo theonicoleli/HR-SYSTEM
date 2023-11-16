@@ -4,6 +4,8 @@ import entities.*;
 import entities.DataBase.DAO;
 import entities.enumerator.Setor;
 import entities.enumerator.Turno;
+import swing.Mainframe;
+import swing.telalogin;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,6 +14,11 @@ import java.util.Date;
 public class Main {
     public static void main(String[] args) {
         try {
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    new telalogin().setVisible(true);
+                }
+            });
 
             DAO dataBase = new DAO(); //DataBase
 
@@ -34,33 +41,34 @@ public class Main {
             Date dtNascimentoFelipe = dateFormat.parse("17/04/2000");
             Turno turnoFelipe = Turno.TARDE;
 
-            Pessoa jose = new RH("José Silva", "12312312312", dtNascimentoJose, setorJose,
-                    12900.50, "12343212", "Administrador", turnoJose);
+            //Pessoa jose = new RH("José Silva", "12312312312", dtNascimentoJose, setorJose,
+                    //12900.50, "12343212", "Administrador", turnoJose);
 
-            Pessoa felipe = new Funcionario("Felipe Souza", "78453423487", dtNascimentoFelipe, setorFelipe,
-                    13500.30, "127895423", "Contador de produtos", turnoFelipe);
+            //Pessoa felipe = new Funcionario("Felipe Souza", "78453423487", dtNascimentoFelipe, setorFelipe,
+                    //13500.30, "127895423", "Contador de produtos", turnoFelipe);
 
             //((RH) jose).adicionarFuncionario(felipe);
             //((RH) jose).adicionarFuncionario(jose);
 
             System.out.println("Database: ");
 
-            ((RH) jose).informacoesFuncionarios();
+            //((RH) jose).informacoesFuncionarios();
             System.out.println();
 
-            ((RH) jose).alterarFuncionario("78453423487", 3500);
+            //((RH) jose).alterarFuncionario("78453423487", 3500);
 
-            ((RH) jose).informacoesFuncionarios();
+            //((RH) jose).informacoesFuncionarios();
 
             System.out.println();
             System.out.println("ATUALIZADO: ");
             System.out.println();
-            ((RH) jose).infoFuncionario("78453423487");
+            //((RH) jose).infoFuncionario("78453423487");
 
             //((RH) jose).removerFuncionario("78453423487");
             //((RH) jose).removerFuncionario("12312312312");
 
             System.out.println(jequitiba);
+
 
         }
         catch (ParseException e) {

@@ -3,6 +3,7 @@ package entities.records;
 import entities.Funcionario;
 import entities.Pessoa;
 
+import java.util.Optional;
 import java.util.Set;
 
 public record RHTABLE(Set<? super Pessoa> funcionarios) {
